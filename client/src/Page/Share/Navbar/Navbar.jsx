@@ -8,7 +8,7 @@ const Navbar = () => {
 
     return (
         <div className="navbar text-white fixed z-10 bg-black bg-opacity-30">
-            <div className="navbar-start ml-44">
+            <div className="navbar-start md:ml-44">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
@@ -24,7 +24,7 @@ const Navbar = () => {
                     {navOption}
                 </ul>
             </div>
-            <div className="navbar-end mr-44">
+            <div className="navbar-end md:mr-44">
                 <a className="btn">Button</a>
             </div>
         </div>

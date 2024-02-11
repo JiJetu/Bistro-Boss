@@ -33,23 +33,23 @@ const Category = () => {
             >
                 <SwiperSlide>
                     <img className='relative' src={slide1} alt="" />
-                    <h3 className='text-4xl uppercase text-center text-gray-100 absolute bottom-10 left-1/4'>Salads</h3>
+                    <h3 className='md:text-4xl uppercase text-center text-gray-100 absolute bottom-[10%] left-1/4'>Salads</h3>
                 </SwiperSlide>
                 <SwiperSlide>
                     <img className='relative' src={slide2} alt="" />
-                    <h3 className='text-4xl uppercase text-center text-gray-100 absolute bottom-10 left-1/4'>Pizza</h3>
+                    <h3 className='md:text-4xl uppercase text-center text-gray-100 absolute bottom-[10%] left-1/4'>Pizza</h3>
                 </SwiperSlide>
                 <SwiperSlide>
                     <img className='relative' src={slide3} alt="" />
-                    <h3 className='text-4xl uppercase text-center text-gray-100 absolute bottom-10 left-1/4'>Soups</h3>
+                    <h3 className='md:text-4xl uppercase text-center text-gray-100 absolute bottom-[10%] left-1/4'>Soups</h3>
                 </SwiperSlide>
                 <SwiperSlide>
                     <img className='relative' src={slide4} alt="" />
-                    <h3 className='text-4xl uppercase text-center text-gray-100 absolute bottom-10 left-1/4'>Desserts</h3>
+                    <h3 className='md:text-4xl uppercase text-center text-gray-100 absolute bottom-[10%] left-1/4'>Desserts</h3>
                 </SwiperSlide>
                 <SwiperSlide>
                     <img className='relative' src={slide5} alt="" />
-                    <h3 className='text-4xl uppercase text-center text-gray-100 absolute bottom-10 left-1/4'>Salads</h3>
+                    <h3 className='md:text-4xl uppercase text-center text-gray-100 absolute bottom-[10%] left-1/4'>Salads</h3>
                 </SwiperSlide>
             </Swiper>
         </section >

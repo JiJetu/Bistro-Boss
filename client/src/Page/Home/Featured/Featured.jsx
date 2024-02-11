@@ -10,11 +10,11 @@ const Featured = () => {
                 subHeading={'Check it out'}
                 style = {`style={{color: "white"}}`}
             ></SectionHeading>
-            <div className="flex justify-center items-center gap-10 px-32 pb-12">
+            <div className="flex flex-col md:flex-row justify-center items-center gap-10 p-8 md:px-32 md:pb-12">
                 <div className="flex-1">
                     <img className="w-full" src={featuredImg} alt="" />
                 </div>
-                <div className="text-white flex-1 space-y-3">
+                <div className="text-white text-center md:text-start flex-1 space-y-3">
                     <p>March 20, 2023</p>
                     <h3 className="uppercase text-lg">
                         WHERE CAN I GET SOME?
