@@ -1,5 +1,10 @@
+import { useEffect, useState } from "react";
 
 const Footer = () => {
+    const [year, setYear] = useState(new Date().getFullYear())
+    useEffect( () =>{
+        setYear(new Date().getFullYear())
+    },[])
     return (
         <footer>
             <div className="footer p-10 bg-neutral text-neutral-content">
@@ -27,7 +32,7 @@ const Footer = () => {
             </div>
             <div className="footer footer-center p-4 bg-base-300 text-base-content">
                 <aside>
-                    <p>Copyright © 2024 - All right reserved by ACME Industries Ltd</p>
+                    <p>Copyright &copy; {`${year}`} - All right reserved by ACME Industries Ltd</p>
                 </aside>
             </div>
         </footer>
