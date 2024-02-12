@@ -4,7 +4,8 @@ const Navbar = () => {
 
     const navOption = <>
         <li><Link to='/'>Home</Link></li>
-        <li><Link to='/Menu'>Menu</Link></li>
+        <li><Link to='/menu'>Menu</Link></li>
+        <li><Link to='/shop'>Shop Now</Link></li>
     </>
 
     return (
