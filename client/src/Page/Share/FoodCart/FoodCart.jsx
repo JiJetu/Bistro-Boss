@@ -9,7 +9,7 @@ const FoodCart = ({ item }) => {
                 <h2 className="text-2xl font-semibold">{name}</h2>
                 <p>{recipe}</p>
                 <div className="card-actions justify-center">
-                    <button className="btn btn-primary">Add to Cart</button>
+                    <button className="btn bg-slate-200 btn-outline border-0 border-b-4 border-orange-400">Add to Cart</button>
                 </div>
             </div>
         </div>

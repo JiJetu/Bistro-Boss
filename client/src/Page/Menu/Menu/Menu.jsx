@@ -48,7 +48,7 @@ const Menu = () => {
                 <MenuCategory
                     items={dessert}
                     coverImg={dessertImg}
-                    title={'Dessert'}
+                    title={'dessert'}
                     subTitle={'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sint illo dicta ab ea minus inventore.'}
                 ></MenuCategory>
             </section>

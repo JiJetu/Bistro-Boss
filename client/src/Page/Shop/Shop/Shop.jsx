@@ -7,15 +7,22 @@ import { useState } from "react";
 import "./Shop.css"
 import UseMenu from "../../../hooks/UseMenu";
 import ShopTabs from "../../../Components/ShopTabs/ShopTabs";
+import { useParams } from "react-router-dom";
 
 const Shop = () => {
-    const [tabIndex, setTabIndex] = useState(0);
+    // set category as there syntax 
+    const categories = ["salad", "pizza", "soup", "dessert", "drinks"];
+    const {category} = useParams();
+    const initialIndex = categories.indexOf(category);
+    const [tabIndex, setTabIndex] = useState(initialIndex);
+
     const [menu] = UseMenu();
     const salad = menu.filter(item => item.category === "salad")
     const dessert = menu.filter(item => item.category === "dessert")
     const pizza = menu.filter(item => item.category === "pizza")
     const drinks = menu.filter(item => item.category === "drinks")
     const soup = menu.filter(item => item.category === "soup")
+
 
     return (
         <div>
