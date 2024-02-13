@@ -28,7 +28,35 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
 
-        
+        const BossDB = client.db("BossDB");
+        const menu = BossDB.collection("menu");
+        const review = BossDB.collection("review");
+
+        // menu
+        // find all menu
+        app.get('/menu', async (req, res) => {
+            try {
+                const result = await menu.find().toArray()
+                res.send(result)
+            } 
+            catch (error) {
+                console.log(error);
+                res.send(error)
+            }
+        })
+
+        // review
+        // find all review
+        app.get('/review', async(req, res) => {
+            try {
+                const result = await review.find().toArray()
+                res.send(result)    
+            } 
+            catch (error) {
+                console.log(error);
+                res.send(error)
+            }
+        }) 
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
