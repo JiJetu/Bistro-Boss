@@ -13,7 +13,7 @@ const MenuCategory = ({ items, coverImg, title, subTitle }) => {
             ></Cover>}
             <div className="mt-24 grid md:grid-cols-2 gap-8 mb-20 max-w-screen-xl mx-auto">
                 {
-                    items.map(item => <MenuItem
+                    items.slice(0,6).map(item => <MenuItem
                         key={item._id} item={item}
                     ></MenuItem>)
                 }

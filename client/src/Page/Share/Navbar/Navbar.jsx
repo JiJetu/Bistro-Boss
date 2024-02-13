@@ -1,6 +1,9 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../../Provider/AuthProvider";
 
 const Navbar = () => {
+    const { user, logOut } = useContext(AuthContext)
 
     const navOption = <>
         <li><Link to='/'>Home</Link></li>
@@ -9,8 +12,17 @@ const Navbar = () => {
 
     </>
 
+    const handleLogOut =() =>{
+        logOut()
+        .then(() => {
+            alert("logout")
+        }).catch((err) => {
+            alert(err)
+        });
+    }
+
     return (
-        <div className="navbar text-white fixed z-10 bg-black bg-opacity-30">
+        <div className="navbar text-white fixed z-10 bg-black bg-opacity-20">
             <div className="navbar-start md:ml-[5%]">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -28,7 +40,14 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end md:mr-[5%]">
-                <Link className="border-0 hover:border-x-4 hover:border-orange-400 px-3 py-2 rounded-md" to='/login'>LogIn</Link>
+                {user ?
+                    <>
+                        <h3 className='text-xl bg-white px-3 py-2 rounded-full font-bold text-orange-400 mr-4'>{user.displayName.slice(0,2)}</h3>
+                        <button onClick={handleLogOut}  className="border-0 hover:border-y-4 hover:border-orange-400 px-3 py-2 rounded-md">LogOut</button> 
+                    </>
+                    :
+                    <Link className="border-0 hover:border-x-4 hover:border-orange-400 px-3 py-2 rounded-md" to='/login'>LogIn</Link>
+                }
             </div>
         </div>
     );
