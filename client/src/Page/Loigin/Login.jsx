@@ -2,12 +2,17 @@ import { useContext, useEffect, useState } from 'react';
 import loginImg from '../../../assets/others/authentication1.png'
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { AuthContext } from '../../Provider/AuthProvider';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const Login = () => {
     const [disable, setDisable] = useState(true);
-    const { signIn } = useContext(AuthContext)
+    const { signIn, googleSignIn } = useContext(AuthContext);
+    const location = useLocation();
+    const navigate = useNavigate()
+
+    const from = location.state?.from?.pathname || '/'
 
     // number of character for captcha
     useEffect(() => {
@@ -25,6 +30,32 @@ const Login = () => {
         }
     }
 
+    const handleGoogleLogIn = () => {
+        googleSignIn()
+            .then(() => {
+                Swal.fire({
+                    title: "LogIn Successful",
+                    showClass: {
+                        popup: `
+                    animate__animated
+                    animate__fadeInUp
+                    animate__faster
+                  `
+                    },
+                    hideClass: {
+                        popup: `
+                    animate__animated
+                    animate__fadeOutDown
+                    animate__faster
+                  `
+                    }
+                });
+                navigate(from, { replace: true });
+            }).catch((err) => {
+                alert(err)
+            });
+    }
+
     const handleLogin = event => {
         event.preventDefault()
         const form = event.target;
@@ -34,8 +65,26 @@ const Login = () => {
         signIn(email, password)
             .then((result) => {
                 const user = result.user;
-                if(user){
-                    alert("LogIn Successful")
+                if (user) {
+                    Swal.fire({
+                        title: "LogIn Successful",
+                        showClass: {
+                            popup: `
+                            animate__animated
+                            animate__fadeInUp
+                            animate__faster
+                          `
+                        },
+                        hideClass: {
+                            popup: `
+                            animate__animated
+                            animate__fadeOutDown
+                            animate__faster
+                          `
+                        }
+                    });
+                    // navigate(location?.state ? location.state : '/')
+                    navigate(from, { replace: true });
                 }
                 console.log(user);
             }).catch((err) => {
@@ -48,13 +97,13 @@ const Login = () => {
             <Helmet>
                 <title>Bistro Boss | LogIn</title>
             </Helmet>
-            <div className="hero min-h-screen bg-base-200">
+            <div className="hero max-h-screen bg-base-200">
                 <div className="hero-content justify-center items-center flex-col lg:flex-row-reverse">
                     <div className="flex-1">
                         <img className='w-full' src={loginImg} alt="" />
                     </div>
                     <div className="w-full md:w-[37%] shadow-2xl bg-base-100">
-                        <h1 className="text-5xl text-center mt-4 font-bold">LogIn Now!</h1>
+                        <h1 className="text-5xl text-center mt-2 font-bold">LogIn Now!</h1>
                         <form onSubmit={handleLogin} className="card-body">
                             <div className="form-control">
                                 <label className="label">
@@ -87,7 +136,8 @@ const Login = () => {
                                 <input disabled={disable} className="btn btn-primary" type="submit" value="Login" />
                             </div>
                         </form>
-                        <p className='text-center -mt-3 pb-4'>New here? please <Link className='text-blue-700 font-bold' to='/signUp'>Register</Link> now</p>
+                        <button onClick={handleGoogleLogIn} className='text-center -mt-2 w-full bg-red-600 text-white py-2'>Google</button>
+                        <p className='text-center mt-1 pb-4'>New here? please <Link className='text-blue-700 font-bold' to='/signUp'>Register</Link> now</p>
                     </div>
                 </div>
             </div>

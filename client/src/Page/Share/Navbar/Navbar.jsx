@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../../Provider/AuthProvider";
+import { GiShoppingCart } from "react-icons/gi";
 
 const Navbar = () => {
     const { user, logOut } = useContext(AuthContext)
@@ -9,16 +10,21 @@ const Navbar = () => {
         <li><Link to='/'>Home</Link></li>
         <li><Link to='/menu'>Menu</Link></li>
         <li><Link to='/shop/salad'>Shop Now</Link></li>
-
+        <li>
+            <Link><button className="text-[22px] flex">
+                <GiShoppingCart></GiShoppingCart>
+                <div className="badge mr-2">+0</div>
+            </button></Link>
+        </li>
     </>
 
-    const handleLogOut =() =>{
+    const handleLogOut = () => {
         logOut()
-        .then(() => {
-            alert("logout successful")
-        }).catch((err) => {
-            alert(err)
-        });
+            .then(() => {
+                alert("logout successful")
+            }).catch((err) => {
+                alert(err)
+            });
     }
 
     return (
@@ -42,8 +48,8 @@ const Navbar = () => {
             <div className="navbar-end md:mr-[5%]">
                 {user ?
                     <>
-                        <h3 className='text-xl bg-white px-3 py-2 rounded-full font-bold text-orange-400 mr-4'>{user.displayName.slice(0,2)}</h3>
-                        <button onClick={handleLogOut}  className="border-0 hover:border-y-4 hover:border-orange-400 px-3 py-2 rounded-md">LogOut</button> 
+                        <h3 className='text-xl bg-white px-3 py-2 rounded-full font-bold text-orange-400 mr-4'>{user.displayName.slice(0, 2)}</h3>
+                        <button onClick={handleLogOut} className="border-0 hover:border-y-4 hover:border-orange-400 px-3 py-2 rounded-md">LogOut</button>
                     </>
                     :
                     <Link className="border-0 hover:border-x-4 hover:border-orange-400 px-3 py-2 rounded-md" to='/login'>LogIn</Link>

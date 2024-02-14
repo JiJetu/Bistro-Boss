@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../../Provider/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
 
 const SignUp = () => {
     const { createUser, profileUpdate } = useContext(AuthContext);
@@ -16,10 +17,31 @@ const SignUp = () => {
             .then((result) => {
                 const newUser = result.user;
                 profileUpdate(data.name)
-                if (newUser) {
-                    alert(`Register Successfully`)
-                    navigate('/login')
-                }
+                    .then( () => {
+                        if (newUser) {
+                            Swal.fire({
+                                title: "Register Successful",
+                                showClass: {
+                                    popup: `
+                                animate__animated
+                                animate__fadeInUp
+                                animate__faster
+                              `
+                                },
+                                hideClass: {
+                                    popup: `
+                                animate__animated
+                                animate__fadeOutDown
+                                animate__faster
+                              `
+                                }
+                            });
+                            navigate('/login')
+                        }
+                    }).catch(err => {
+                        alert(err)
+                    })
+
                 console.log(newUser);
 
             }).catch((err) => {
