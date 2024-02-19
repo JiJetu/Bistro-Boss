@@ -29,16 +29,17 @@ async function run() {
         await client.connect();
 
         const BossDB = client.db("BossDB");
-        const menu = BossDB.collection("menu");
-        const review = BossDB.collection("review");
+        const menuCollection = BossDB.collection("menu");
+        const reviewCollection = BossDB.collection("review");
+        const cartsCollection = BossDB.collection("carts");
 
         // menu
         // find all menu
         app.get('/menu', async (req, res) => {
             try {
-                const result = await menu.find().toArray()
+                const result = await menuCollection.find().toArray()
                 res.send(result)
-            } 
+            }
             catch (error) {
                 console.log(error);
                 res.send(error)
@@ -47,16 +48,34 @@ async function run() {
 
         // review
         // find all review
-        app.get('/review', async(req, res) => {
+        app.get('/review', async (req, res) => {
             try {
-                const result = await review.find().toArray()
-                res.send(result)    
-            } 
+                const result = await reviewCollection.find().toArray()
+                res.send(result)
+            }
             catch (error) {
                 console.log(error);
                 res.send(error)
             }
-        }) 
+        })
+
+        // carts
+        // find all carts collection
+        app.get('/carts', async (req, res) => {
+            const result = await cartsCollection.find().toArray();
+            res.send(result)
+        })
+        // create cart collection
+        app.post('/carts', async (req, res) => {
+            try {
+                const cartItem = req.body;
+                const result = await cartsCollection.insertOne(cartItem)
+                res.send(result) 
+            } catch (error) {
+                console.log(err);
+                res.send(err)
+            }
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
