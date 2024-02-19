@@ -13,7 +13,7 @@ const Navbar = () => {
         <li><Link to='/menu'>Menu</Link></li>
         <li><Link to='/shop/salad'>Shop Now</Link></li>
         <li>
-            <Link><button className="text-[22px] flex">
+            <Link to='/dashboard/cart'><button className="text-[22px] flex">
                 <GiShoppingCart></GiShoppingCart>
                 <div className="badge mr-2">+{cart.length}</div>
             </button></Link>
