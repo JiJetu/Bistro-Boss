@@ -22,7 +22,7 @@ import Cart from "../Page/DashBoard/Cart/Cart";
         },
         {
           path: 'menu',
-          element: <PrivateRoute><Menu></Menu></PrivateRoute>
+          element: <Menu></Menu>
         },
         {
           path: 'shop',
@@ -44,7 +44,7 @@ import Cart from "../Page/DashBoard/Cart/Cart";
     },
     {
       path: "dashboard",
-      element: <Dashboard></Dashboard>,
+      element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
       children: [
         {
           path: "cart",

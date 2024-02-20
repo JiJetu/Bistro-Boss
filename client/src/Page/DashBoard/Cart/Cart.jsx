@@ -22,7 +22,7 @@ const Cart = () => {
                 axiosSecure.delete(`/carts/${id}`)
                     .then(res => {
                         if (res.data.deletedCount > 0) {
-                            refetch()
+                            refetch();
                             Swal.fire({
                                 title: "Deleted!",
                                 text: "Your Item has been deleted.",
@@ -36,7 +36,7 @@ const Cart = () => {
 
     return (
         <div>
-            <div className="flex justify-between mt-10">
+            <div className="flex justify-between my-10">
                 <h2 className="text-5xl">Total Item: {cart.length}</h2>
                 <h3 className="text-5xl">Total Price: {totalPrice.toFixed(2)}</h3>
                 <button className="btn btn-primary">Pay</button>

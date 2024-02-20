@@ -5,14 +5,15 @@ import { AuthContext } from '../../Provider/AuthProvider';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import SocialLogIn from '../../Components/SocialLogIn/SocialLogIn';
 
 const Login = () => {
     const [disable, setDisable] = useState(true);
-    const { signIn, googleSignIn } = useContext(AuthContext);
+    const { signIn } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate()
 
-    const from = location.state?.from?.pathname || '/'
+    const from = location.state?.from?.pathname || '/';
 
     // number of character for captcha
     useEffect(() => {
@@ -30,31 +31,6 @@ const Login = () => {
         }
     }
 
-    const handleGoogleLogIn = () => {
-        googleSignIn()
-            .then(() => {
-                Swal.fire({
-                    title: "LogIn Successful",
-                    showClass: {
-                        popup: `
-                    animate__animated
-                    animate__fadeInUp
-                    animate__faster
-                  `
-                    },
-                    hideClass: {
-                        popup: `
-                    animate__animated
-                    animate__fadeOutDown
-                    animate__faster
-                  `
-                    }
-                });
-                navigate(from, { replace: true });
-            }).catch((err) => {
-                alert(err)
-            });
-    }
 
     const handleLogin = event => {
         event.preventDefault()
@@ -136,7 +112,7 @@ const Login = () => {
                                 <input disabled={disable} className="btn btn-primary" type="submit" value="Login" />
                             </div>
                         </form>
-                        <button onClick={handleGoogleLogIn} className='text-center -mt-2 w-full bg-red-600 text-white py-2'>Google</button>
+                        <SocialLogIn></SocialLogIn>
                         <p className='text-center mt-1 pb-4'>New here? please <Link className='text-blue-700 font-bold' to='/signUp'>Register</Link> now</p>
                     </div>
                 </div>

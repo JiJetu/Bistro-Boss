@@ -5,11 +5,14 @@ import { AuthContext } from '../../Provider/AuthProvider';
 import { useForm } from 'react-hook-form';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
+import UseAxiosPublic from '../../hooks/UseAxiosPublic';
+import SocialLogIn from '../../Components/SocialLogIn/SocialLogIn';
 
 const SignUp = () => {
     const { createUser, profileUpdate } = useContext(AuthContext);
     const { register, handleSubmit, formState: { errors } } = useForm();
     const navigate = useNavigate();
+    const axiosPublic = UseAxiosPublic()
 
     const onSubmit = data => {
         console.log(data);
@@ -17,26 +20,36 @@ const SignUp = () => {
             .then((result) => {
                 const newUser = result.user;
                 profileUpdate(data.name)
-                    .then( () => {
+                    .then(() => {
                         if (newUser) {
-                            Swal.fire({
-                                title: "Register Successful",
-                                showClass: {
-                                    popup: `
-                                animate__animated
-                                animate__fadeInUp
-                                animate__faster
-                              `
-                                },
-                                hideClass: {
-                                    popup: `
-                                animate__animated
-                                animate__fadeOutDown
-                                animate__faster
-                              `
-                                }
-                            });
-                            navigate('/login')
+                            const userInfo = {
+                                name: data.name,
+                                email: data.email
+                            }
+                            axiosPublic.post('/users', userInfo)
+                                .then(res => {
+                                    if (res.data.insertedId) {
+                                        Swal.fire({
+                                            title: "Register Successful",
+                                            showClass: {
+                                                popup: `
+                                    animate__animated
+                                    animate__fadeInUp
+                                    animate__faster
+                                  `
+                                            },
+                                            hideClass: {
+                                                popup: `
+                                    animate__animated
+                                    animate__fadeOutDown
+                                    animate__faster
+                                  `
+                                            }
+                                        });
+                                        navigate('/login')
+                                    }
+                                })
+
                         }
                     }).catch(err => {
                         alert(err)
@@ -134,6 +147,7 @@ const SignUp = () => {
                                 <input className="btn btn-primary" type="submit" value="SignUP" />
                             </div>
                         </form>
+                        <SocialLogIn></SocialLogIn>
                         <p className='text-center -mt-8 p-7'>Already have an account!! <Link className='text-blue-700 font-bold' to='/login'>LogIn</Link> now</p>
                     </div>
                 </div>
