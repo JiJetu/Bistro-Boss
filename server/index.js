@@ -29,9 +29,29 @@ async function run() {
         await client.connect();
 
         const BossDB = client.db("BossDB");
+        const userCollection = BossDB.collection("users");
         const menuCollection = BossDB.collection("menu");
         const reviewCollection = BossDB.collection("review");
         const cartsCollection = BossDB.collection("carts");
+
+        // user related api
+        app.post('/users', async (req, res) => {
+            try {
+                const user = req.body;
+                // insert email if user doesn't exist
+                const email = user.email;
+                const query = {email: email}
+                const existingUser = await userCollection.findOne(query);
+                if(existingUser){
+                    return res.send({message: "user already exist", insertedId: null})
+                }
+                const result = await userCollection.insertOne(user);
+                res.send(result);
+            } catch (error) {
+                console.log(error);
+                res.send(error)
+            }
+        })
 
         // menu
         // find all menu
@@ -63,7 +83,7 @@ async function run() {
         // find all carts collection
         app.get('/carts', async (req, res) => {
             const email = req.query.email;
-            const query = {email: email}
+            const query = { email: email }
             const result = await cartsCollection.find(query).toArray();
             res.send(result)
         })
@@ -72,17 +92,17 @@ async function run() {
             try {
                 const cartItem = req.body;
                 const result = await cartsCollection.insertOne(cartItem)
-                res.send(result) 
+                res.send(result)
             } catch (error) {
                 console.log(err);
                 res.send(err)
             }
         })
 
-        app.delete('/carts/:id', async(req, res) => {
+        app.delete('/carts/:id', async (req, res) => {
             try {
                 const id = req.params.id;
-                const query = {_id : new ObjectId(id)}
+                const query = { _id: new ObjectId(id) }
                 const result = await cartsCollection.deleteOne(query);
                 res.send(result);
             } catch (error) {
