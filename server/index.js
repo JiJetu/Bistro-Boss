@@ -1,8 +1,9 @@
-const express = require('express');
+const express = require('express')
 const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
+const jwt = require('jsonwebtoken');
 const port = process.env.PORT || 5000;
 
 
@@ -34,18 +35,66 @@ async function run() {
         const reviewCollection = BossDB.collection("review");
         const cartsCollection = BossDB.collection("carts");
 
-        // user related api
+        // jwt related api--------------------
+        app.post('/jwt', async (req, res) => {
+            try {
+                const user = req.body;
+                const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                    expiresIn: '1h'
+                })
+                res.send({ token })
+            } catch (error) {
+                console.log(error);
+                res.send(error)
+            }
+        })
+
+        // user related api------------------
+        app.get('/users', async (req, res) => {
+            try {
+                const result = await userCollection.find().toArray();
+                res.send(result);
+            } catch (error) {
+                console.log(error);
+                res.send(error)
+            }
+        })
+
         app.post('/users', async (req, res) => {
             try {
                 const user = req.body;
                 // insert email if user doesn't exist
                 const email = user.email;
-                const query = {email: email}
+                const query = { email: email }
                 const existingUser = await userCollection.findOne(query);
-                if(existingUser){
-                    return res.send({message: "user already exist", insertedId: null})
+                if (existingUser) {
+                    return res.send({ message: "user already exist", insertedId: null })
                 }
                 const result = await userCollection.insertOne(user);
+                res.send(result);
+            } catch (error) {
+                console.log(error);
+                res.send(error)
+            }
+        })
+
+        app.patch('/users/admin/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const updatedDoc = {
+                $set: {
+                    role: 'admin'
+                }
+            }
+            const result = await userCollection.updateOne(filter, updatedDoc);
+            res.send(result)
+        })
+
+        app.delete('/users/:id', async (req, res) => {
+            try {
+                const id = req.params.id;
+                const query = { _id: new ObjectId(id) };
+                const result = await userCollection.deleteOne(query);
                 res.send(result);
             } catch (error) {
                 console.log(error);
