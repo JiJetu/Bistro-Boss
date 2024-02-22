@@ -2,9 +2,10 @@ import { FaBook, FaCalendar, FaEnvelope, FaHome, FaList, FaShoppingCart, FaUsers
 import { GoCodeReview, GoListUnordered } from "react-icons/go";
 import { IoIosMenu } from "react-icons/io";
 import { NavLink, Outlet } from "react-router-dom";
+import UseAdmin from "../hooks/UseAdmin";
 
 const Dashboard = () => {
-    const isAdmin = true;
+    const [isAdmin] = UseAdmin();
 
     return (
         <div className="flex max-w-screen-xl mx-auto">
