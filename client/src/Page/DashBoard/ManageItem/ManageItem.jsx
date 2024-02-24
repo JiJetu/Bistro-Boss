@@ -1,15 +1,42 @@
 import { FaEdit, FaTrash } from "react-icons/fa";
 import SectionHeading from "../../../Components/SectionHeading/SectionHeading";
 import UseMenu from "../../../hooks/UseMenu";
+import Swal from "sweetalert2";
+import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
 
 const ManageItem = () => {
-    const [menu] = UseMenu();
+    const [menu, ,refetch] = UseMenu();
+    const axiosSecure = UseAxiosSecure();
 
     const handleUpdateItem = item => {
 
     }
 
     const handleDeleteItem = item => {
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const res = await axiosSecure.delete(`/menu/${item._id}`);
+                console.log(res.data);
+                if (res.data.deletedCount > 0) {
+                    refetch();
+                    Swal.fire({
+                        position: "center-top",
+                        icon: "success",
+                        title: `${item.name} has been deleted`,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                }
+            }
+        });
 
     }
 
@@ -53,8 +80,8 @@ const ManageItem = () => {
                                     <td>${item.price}</td>
                                     <td>
                                         <button
-                                        onClick={() => handleUpdateItem(item)}
-                                         className="btn-sm bg-orange-500 rounded-lg">
+                                            onClick={() => handleUpdateItem(item)}
+                                            className="btn-sm bg-orange-500 rounded-lg">
                                             <FaEdit className="text-white"></FaEdit>
                                         </button>
                                     </td>
