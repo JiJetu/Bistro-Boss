@@ -168,6 +168,12 @@ async function run() {
             }
         })
 
+        app.post('/menu', verifyToken, verifyAdmin, async(req, res) => {
+            const item = req.body;
+            const result = await menuCollection.insertOne(item);
+            res.send(result);
+        })
+
         // review
         // find all review
         app.get('/review', async (req, res) => {
