@@ -3,14 +3,12 @@ import SectionHeading from "../../../Components/SectionHeading/SectionHeading";
 import UseMenu from "../../../hooks/UseMenu";
 import Swal from "sweetalert2";
 import UseAxiosSecure from "../../../hooks/UseAxiosSecure";
+import { Link } from "react-router-dom";
 
 const ManageItem = () => {
-    const [menu, ,refetch] = UseMenu();
+    const [menu, , refetch] = UseMenu();
     const axiosSecure = UseAxiosSecure();
 
-    const handleUpdateItem = item => {
-
-    }
 
     const handleDeleteItem = item => {
         Swal.fire({
@@ -79,11 +77,12 @@ const ManageItem = () => {
                                     </td>
                                     <td>${item.price}</td>
                                     <td>
-                                        <button
-                                            onClick={() => handleUpdateItem(item)}
-                                            className="btn-sm bg-orange-500 rounded-lg">
-                                            <FaEdit className="text-white"></FaEdit>
-                                        </button>
+                                        <Link to={`/dashboard/updateItem/${item._id}`}>
+                                            <button
+                                                className="btn-sm bg-orange-500 rounded-lg">
+                                                <FaEdit className="text-white"></FaEdit>
+                                            </button>
+                                        </Link>
                                     </td>
                                     <td>
                                         <button
