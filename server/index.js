@@ -1,9 +1,10 @@
-const express = require('express')
+const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const jwt = require('jsonwebtoken');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000;
 
 
@@ -34,6 +35,7 @@ async function run() {
         const menuCollection = BossDB.collection("menu");
         const reviewCollection = BossDB.collection("review");
         const cartsCollection = BossDB.collection("carts");
+        const paymentCollection = BossDB.collection("payments");
 
         // jwt related api--------------------
         app.post('/jwt', async (req, res) => {
@@ -265,6 +267,57 @@ async function run() {
                 console.log(err);
                 res.send(err)
             }
+        })
+
+
+        // payment intent
+        app.post('/create-payment-intent', async(req, res) => {
+            try {
+                const { price } = req.body;
+        
+                // // Validate price
+                // if (isNaN(price)) {
+                //     throw new Error('Invalid price value');
+                // }
+        
+                const amount = parseInt(price * 100);
+                console.log('amount inside the intent', amount);
+        
+                const paymentIntent = await stripe.paymentIntents.create({
+                    amount: amount,
+                    currency: 'usd',
+                    payment_method_types: ['card']
+                });
+        
+                res.send({
+                    clientSecret: paymentIntent.client_secret
+                });
+            } catch (error) {
+                console.error('Error processing payment intent:', error);
+                res.status(500).send({ error: 'Error processing payment intent' });
+            }
+        });
+
+        app.get('/payments/:email', verifyToken, async(req, res) => {
+            const query = {email: req.params.email};
+            if(req.params.email !== req.decoded.email){
+                return res.status(403).send({massage: 'forbidden access'})
+            }
+            const result = await paymentCollection.find().toArray();
+            res.send(result)
+        })
+        
+        app.post('/payments', async(req, res) =>{
+            const payment = req.body;
+            const paymentResult = await paymentCollection.insertOne(payment);
+
+            // carefully delete each item from the cart
+            const query = {_id: {
+                $in: payment.cardIds.map(id => new ObjectId(id))
+            }}
+            const deleteResult = await cartsCollection.deleteMany(query);
+            
+            res.send({paymentResult, deleteResult})
         })
 
         // Send a ping to confirm a successful connection
