@@ -63,15 +63,18 @@ const Dashboard = () => {
                                     </NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to='/dashboard/bookings'>
-                                        <GoListUnordered></GoListUnordered> My Bookings
+                                    <NavLink to='/dashboard/paymentHistory'>
+                                        <GoListUnordered></GoListUnordered> Payment History
                                     </NavLink>
                                 </li>
                             </>
                     }
 
-                    {/* shared navLinks */}
+
                     <div className="divider"></div>
+
+                    {/* shared navLinks */}
+
                     <li>
                         <NavLink to='/'>
                             <FaHome></FaHome> Home
