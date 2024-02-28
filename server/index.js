@@ -198,12 +198,12 @@ async function run() {
             const id = req.params.id;
             const filter = { _id: new ObjectId(id) };
             const updatedDoc = {
-                $set:{
-                   name: item.name,
-                   price: item.price,
-                   recipe: item.recipe,
-                   category: item.category,
-                   image: item.image 
+                $set: {
+                    name: item.name,
+                    price: item.price,
+                    recipe: item.recipe,
+                    category: item.category,
+                    image: item.image
                 }
             }
             const result = await menuCollection.updateOne(filter, updatedDoc);
@@ -271,24 +271,24 @@ async function run() {
 
 
         // payment intent
-        app.post('/create-payment-intent', async(req, res) => {
+        app.post('/create-payment-intent', async (req, res) => {
             try {
                 const { price } = req.body;
-        
+
                 // // Validate price
                 // if (isNaN(price)) {
                 //     throw new Error('Invalid price value');
                 // }
-        
+
                 const amount = parseInt(price * 100);
                 console.log('amount inside the intent', amount);
-        
+
                 const paymentIntent = await stripe.paymentIntents.create({
                     amount: amount,
                     currency: 'usd',
                     payment_method_types: ['card']
                 });
-        
+
                 res.send({
                     clientSecret: paymentIntent.client_secret
                 });
@@ -298,26 +298,60 @@ async function run() {
             }
         });
 
-        app.get('/payments/:email', verifyToken, async(req, res) => {
-            const query = {email: req.params.email};
-            if(req.params.email !== req.decoded.email){
-                return res.status(403).send({massage: 'forbidden access'})
+        app.get('/payments/:email', verifyToken, async (req, res) => {
+            const query = { email: req.params.email };
+            if (req.params.email !== req.decoded.email) {
+                return res.status(403).send({ massage: 'forbidden access' })
             }
             const result = await paymentCollection.find().toArray();
             res.send(result)
         })
-        
-        app.post('/payments', async(req, res) =>{
+
+        app.post('/payments', async (req, res) => {
             const payment = req.body;
             const paymentResult = await paymentCollection.insertOne(payment);
 
             // carefully delete each item from the cart
-            const query = {_id: {
-                $in: payment.cardIds.map(id => new ObjectId(id))
-            }}
+            const query = {
+                _id: {
+                    $in: payment.cardIds.map(id => new ObjectId(id))
+                }
+            }
             const deleteResult = await cartsCollection.deleteMany(query);
-            
-            res.send({paymentResult, deleteResult})
+
+            res.send({ paymentResult, deleteResult })
+        })
+
+
+        // stats or analytics
+        app.get('/admin-stats', verifyToken, verifyAdmin async (req, res) => {
+            const users = await userCollection.estimatedDocumentCount();
+            const menuItems = await menuCollection.estimatedDocumentCount();
+            const orders = await paymentCollection.estimatedDocumentCount();
+
+            // // this is not the best way
+            // const payments =await paymentCollection.find().toArray();
+            // const revenue = payments.reduce((total, payment) => total + payment.price, 0)
+
+            const result = await paymentCollection.aggregate([
+                {
+                    $group: {
+                        _id: null,
+                        totalRevenue: {
+                            $sum: '$price'
+                        }
+                    }
+                }
+            ]).toArray();
+
+            const revenue = result.length > 0 ? result[0].totalRevenue : 0;
+
+            res.send({
+                users,
+                menuItems,
+                orders,
+                revenue
+            })
         })
 
         // Send a ping to confirm a successful connection
