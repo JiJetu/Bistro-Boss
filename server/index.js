@@ -324,7 +324,7 @@ async function run() {
 
 
         // stats or analytics
-        app.get('/admin-stats', verifyToken, verifyAdmin async (req, res) => {
+        app.get('/admin-stats', verifyToken, verifyAdmin, async (req, res) => {
             const users = await userCollection.estimatedDocumentCount();
             const menuItems = await menuCollection.estimatedDocumentCount();
             const orders = await paymentCollection.estimatedDocumentCount();
@@ -333,6 +333,8 @@ async function run() {
             // const payments =await paymentCollection.find().toArray();
             // const revenue = payments.reduce((total, payment) => total + payment.price, 0)
 
+
+            // the best way
             const result = await paymentCollection.aggregate([
                 {
                     $group: {
@@ -353,6 +355,50 @@ async function run() {
                 revenue
             })
         })
+
+        // using aggregate pipeline
+        app.get('/order-state', async (req, res) => {
+            const result = await paymentCollection.aggregate([
+                {
+                    $unwind: '$menuIds'
+                },
+                 // Convert string ID to ObjectId before the lookup
+                {
+                    $addFields: {
+                        "convertedMenuId": { $toObjectId: "$menuIds" }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'menu',
+                        localField: 'convertedMenuId',
+                        foreignField: '_id',
+                        as: 'menuItems'
+                    }
+                },
+                {
+                    $unwind: '$menuItems'
+                },
+                {
+                    $group: {
+                        _id: '$menuItems.category',
+                        quantity: { $sum: 1 },
+                        revenue: { $sum: '$menuItems.price' }
+                    }
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        category: '$_id',
+                        quantity: '$quantity',
+                        revenue: '$revenue'
+                    }
+                }
+            ]).toArray()
+
+            res.send(result)
+        })
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
