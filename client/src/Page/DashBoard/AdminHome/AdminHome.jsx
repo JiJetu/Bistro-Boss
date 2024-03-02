@@ -67,7 +67,7 @@ const AdminHome = () => {
 
                 <div className="stat">
                     <div className="stat-figure text-secondary">
-                        <FaDollarSign className="text-3xl"></FaDollarSign>
+                        <FaDollarSign className="md:text-3xl"></FaDollarSign>
                     </div>
                     <div className="stat-title">Revenue</div>
                     <div className="stat-value">{stats?.revenue}</div>
@@ -102,7 +102,7 @@ const AdminHome = () => {
                 </div>
 
             </div>
-            <div className="flex">
+            <div className="flex flex-col md:flex-row">
                 <div className="w-1/2">
                     <BarChart
                         width={500}

@@ -8,8 +8,8 @@ const Dashboard = () => {
     const [isAdmin] = UseAdmin();
 
     return (
-        <div className="flex max-w-screen-xl mx-auto">
-            <div className="w-64 min-h-screen bg-orange-500">
+        <div className="flex flex-col md:flex-row max-w-screen-xl mx-auto">
+            <div className="md:w-64 min-h-screen bg-orange-500">
                 <ul className="menu p-4">
                     {
                         isAdmin ?

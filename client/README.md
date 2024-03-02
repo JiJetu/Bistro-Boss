@@ -16,7 +16,7 @@ Welcome to the GitHub repository of Bistro Boss, a comprehensive web application
 
 ## Technologies Used
 
-- **Frontend**: React with Tailwind CSS
+- **Frontend**: Html, CSS, React with Tailwind CSS
 - **Backend**: Express.js
 - **Database**: MongoDB
 - **Authentication**: Firebase Auth for handling user registration, login, and Google sign-in
